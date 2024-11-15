@@ -4,6 +4,7 @@
 *.sh.swp
 *.dat
 *.fits
+*.tar.gz
 
 #folders
 data/raw_32x32/
