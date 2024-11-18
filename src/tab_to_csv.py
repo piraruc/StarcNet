@@ -85,7 +85,7 @@ def add_headers_to_csv(csv_file):
 
 # Exemplo de uso
 tab_file = 'legus/tab_files/hlsp_legus_hst_wfc3_ngc1566_multiband_v1_padagb-mwext-avgapcor.tab'  # Caminho para o arquivo .tab
-csv_file = 'output/visualizations/original.csv'  # Caminho para salvar o arquivo .csv
+csv_file = 'output/original.csv'  # Caminho para salvar o arquivo .csv
 
 # Converter o arquivo .tab para .csv
 tab_to_csv(tab_file, csv_file)

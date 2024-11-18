@@ -5,6 +5,9 @@
 *.dat
 *.fits
 *.tar.gz
+*.tab
+*.jpeg
+*.png
 
 #folders
 data/raw_32x32/
