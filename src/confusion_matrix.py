@@ -8,11 +8,17 @@ def generate_confusion_matrix(prediction_file, real_data_file):
         df_predictions = pd.read_csv(prediction_file)
         df_real_data = pd.read_csv(real_data_file)
 
-        # Filtrar as linhas onde 'class(mode)' é 0.0
+        # Garantir que as colunas de coordenadas estejam no formato correto
+        df_predictions['X'] = df_predictions['X'].astype(int)
+        df_predictions['Y'] = df_predictions['Y'].astype(int)
+        df_real_data['x'] = df_real_data['x'].astype(int)
+        df_real_data['y'] = df_real_data['y'].astype(int)
+
+        # Filtrar as linhas onde 'class(mode)' é 0.0 (caso seja necessário)
         df_real_data = df_real_data[df_real_data['class(mode)'] != 0.0]
 
-        # Unir os dataframes com base na correspondência entre 'Id' e 'source id'
-        df_merged = pd.merge(df_predictions, df_real_data, left_on='Id', right_on='source id', how='inner')
+        # Unir os dataframes com base na correspondência entre as coordenadas 'X', 'Y' e 'x', 'y'
+        df_merged = pd.merge(df_predictions, df_real_data, left_on=['X', 'Y'], right_on=['x', 'y'], how='inner')
 
         # Agora, temos as colunas 'Prediction' e 'class(mode)' para comparação
         # As previsões estão na coluna 'Prediction' (em inteiro) e as classes reais em 'class(mode)' (em float)
@@ -20,25 +26,26 @@ def generate_confusion_matrix(prediction_file, real_data_file):
         # Garantir que 'Prediction' seja inteiro e 'class(mode)' seja inteiro para comparação
         df_merged['Prediction'] = df_merged['Prediction'].astype(int)
         df_merged['class(mode)'] = df_merged['class(mode)'].astype(int)
-        
+
         # Gerar a matriz de confusão com 4 classes [1, 2, 3, 4]
         cm = confusion_matrix(df_merged['class(mode)'], df_merged['Prediction'], labels=[1, 2, 3, 4])
 
         # Exibir a matriz de confusão com números absolutos e porcentagens por classe
         print("Matriz de Confusão (Números Absolutos e Percentuais por Classe):")
+        cm_percentual = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100
         
-        
-        # Exibir os resultados
         print("\nMatriz de Confusão (apenas números absolutos):")
         print(cm)
-
         
+        print("\nMatriz de Confusão (percentual por classe):")
+        print(cm_percentual)
 
         # Retornar a matriz de confusão para uso posterior, se necessário
         return cm
 
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
+        return None
 
 def generate_percentage_cm(cm):
 # Criar uma matriz NumPy para armazenar as porcentagens
@@ -101,4 +108,4 @@ cm = generate_confusion_matrix(prediction_file, real_data_file)
 cm_percentage = generate_percentage_cm(cm)
 
 # Salvar as informações no arquivo CSV
-save_confusion_and_percentage_to_csv(prediction_file, cm)
+#save_confusion_and_percentage_to_csv(prediction_file, cm)

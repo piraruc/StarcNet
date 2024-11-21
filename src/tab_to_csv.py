@@ -47,7 +47,7 @@ def replace_spaces_in_csv(csv_file):
 # Função para adicionar cabeçalhos ao arquivo CSV
 def add_headers_to_csv(csv_file):
     headers = [
-        'source id', 'x coordinates in the ref frame', 'y coordinates in the ref frame',
+        'source id', 'x', 'y',
         'RA coordinates in the ref frame', 'DEC coordinates in the ref frame', 
         'final total mag in WFC3/F275W', 'final photometric error in WFC3/F275W',
         'final total mag in WFC3/F336W', 'final photometric error in WFC3/F336W',
@@ -63,7 +63,7 @@ def add_headers_to_csv(csv_file):
         'chi2 fit residual in F275W', 'chi2 fit residual in F336W', 'chi2 fit residual in F438W',
         'chi2 fit residual in F555W', 'chi2 fit residual in F814W', 'reduced chi2',
         'Q probability', 'Number of filter', 'class(mode)',
-        'Final assigned class of the source after visual inspection (mean)'
+        'Final class(mean)'
     ]
     
     try:
@@ -84,7 +84,7 @@ def add_headers_to_csv(csv_file):
         print(f"Ocorreu um erro ao adicionar os cabeçalhos: {e}")
 
 # Exemplo de uso
-tab_file = 'legus/tab_files/hlsp_legus_hst_wfc3_ngc1566_multiband_v1_padagb-mwext-avgapcor.tab'  # Caminho para o arquivo .tab
+tab_file = 'legus/tab_files/hlsp_legus_hst_wfc3_ngc3344_multiband_v1_padagb-mwext-avgapcor.tab'  # Caminho para o arquivo .tab
 csv_file = 'output/original.csv'  # Caminho para salvar o arquivo .csv
 
 # Converter o arquivo .tab para .csv
