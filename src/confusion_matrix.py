@@ -108,4 +108,4 @@ cm = generate_confusion_matrix(prediction_file, real_data_file)
 cm_percentage = generate_percentage_cm(cm)
 
 # Salvar as informações no arquivo CSV
-#save_confusion_and_percentage_to_csv(prediction_file, cm)
+save_confusion_and_percentage_to_csv(prediction_file, cm)

@@ -9,17 +9,14 @@ sys.path.insert(0, './src/utils')
 sys.path.insert(0, './model')
 from data_utils import load_db
 
+batch_size = 64  # input batch size for testing (default: 64)
+data_dir = 'data/'  # dataset directory
+dataset = 'raw_32x32'  # dataset file reference
+checkpoint = 'model/starcnet.pth'  # trained model
+gpu = ''  # CUDA visible device (when using a GPU add GPU id (e.g. '0'))
+cuda = False  # enables CUDA training (when using a GPU change to True)
 
-batch_size = 64 # input batch size for testing (default: 64)
-data_dir = 'data/' # dataset directory
-dataset = 'raw_32x32' # dataset file reference
-checkpoint = 'model/starcnet.pth' # trained model
-gpu = '' # CUDA visible device (when using a GPU add GPU id (e.g. '0'))
-cuda = False # enables CUDA training (when using a GPU change to True)
-
-
-
-data_all, _, ids = load_db(os.path.join(data_dir,'test_'+dataset+'.dat'))
+data_all, _, ids = load_db(os.path.join(data_dir, 'test_' + dataset + '.dat'))
 
 # Função para gerar imagens RGB
 def legus2rgb(im):
@@ -62,29 +59,26 @@ def load_fits_image(galaxy, filter_name):
 
 # Loop pelas galáxias listadas em 'targets.txt'
 for galaxy_name in galaxies:  # Iterando sobre os nomes das galáxias
-    # Loop pelas classes de objetos do DataFrame (podemos assumir que você vai iterar sobre todas as classes)
+    # Criar a pasta 'output/cropped/{galaxy_name}' se não existir
+    output_dir = os.path.join('output', 'cropped', galaxy_name)
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Loop pelas classes de objetos do DataFrame
     for idx, row in df.iterrows():  # Iterando sobre as linhas do DataFrame
         class_label = row['class(mode)']
         
         fig = plt.figure(figsize=(14, 4), dpi=80, facecolor='w', edgecolor='k')
         
-        filters = ['f275w', 'f336w', 'f438w', 'f435w', 'f555w', 'f606w', 'f814w']
+        # Gerar a imagem RGB
+        img_rgb = legus2rgb(data_all[:][:][idx, :, :, :])
         
-        for i, filter_name in enumerate(filters):
-            # Carregar a imagem FITS
-            img = load_fits_image(galaxy_name, filter_name)
-            
-            if img is not None:
-                # Gerar a imagem RGB
-                img_rgb = legus2rgb(data_all[:][:][i,:,:,:])
-                
-                # Plotar a imagem no gráfico
-                plt.imshow(img_rgb)
-                plt.axis('off')  # Desativar os eixos para uma imagem limpa
-                
-                # Salvar a imagem gerada com base na classe, ID da galáxia e filtro
-                output_filename = f'class_{class_label}_galaxy_{galaxy_name}_obj_{idx + 1}_filter_{filter_name}.png'
-                plt.savefig(output_filename, bbox_inches='tight', pad_inches=0)
-                plt.close(fig)  # Fechar a figura após salvar para liberar memória
+        # Plotar a imagem no gráfico
+        plt.imshow(img_rgb)
+        plt.axis('off')  # Desativar os eixos para uma imagem limpa
+        
+        # Salvar a imagem gerada com base na classe, ID da galáxia e filtro
+        output_filename = os.path.join(output_dir, f'class_{class_label}_galaxy_{galaxy_name}_obj_{idx + 1}.png')
+        plt.savefig(output_filename, bbox_inches='tight', pad_inches=0)
+        plt.close(fig)  # Fechar a figura após salvar para liberar memória
 
-print(f'Imagens para as classes salvas!')
+print(f'Imagens para as classes salvas em "output/cropped"!') 
