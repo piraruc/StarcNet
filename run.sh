@@ -1,6 +1,15 @@
 # Define a lista de alvos (targets)
-TARGETS=("eso486-g021" "ic4247" "ngc628-c" "ngc628-e" "ngc6503" "ngc3274" "ngc3351" "ngc3738" "ngc4248" "ngc4395" "ngc3351" "ngc3351" "ngc3351" "ngc3351"
- "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351" "ngc3351")
+TARGETS=("eso486-g021" "ic4247" "ngc628-c" 
+"ngc628-e" "ngc6503" "ngc3274" "ic559" 
+"ngc3738" "ngc4248" "ngc4395" "ngc1313-e" 
+"ngc1313-w" "ngc1433" "ngc1566" "ngc1705" 
+"ngc3274" "ngc3344" "ngc3351" "ngc3738" 
+"ngc4242" "ngc4248" "ngc4395-n" "ngc4395-s" 
+"ngc4449" "ngc4485" "ngc45" "ngc4656" 
+"ngc5238" "ngc5253" "ngc5474" "ngc5477"
+ "ngc628-c" "ngc628-e" "ngc6503" "ngc7793-e" 
+ "ngc7793-w" "ugc4305" "ugc4459" "ugc5340" 
+ "ugc685" "ugc695" "ugc7242" "ugc7408" "ugca281")
 
 # Número de repetições (baseado no número de alvos)
 REPEAT_COUNT=${#TARGETS[@]}
