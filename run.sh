@@ -31,8 +31,8 @@ do
     # Define o target atual (o próximo da lista)
     CURRENT_TARGET=${TARGETS[$i]}
     
-    # Atualiza o arquivo target.txt com o valor atual
-    echo $CURRENT_TARGET > target.txt
+    # Atualiza o arquivo targets.txt com o valor atual
+    echo $CURRENT_TARGET > targets.txt
     
     echo "-----------------------------------"
     echo "Repetindo a iteração $((i + 1)) de $REPEAT_COUNT"
