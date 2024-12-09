@@ -1,4 +1,5 @@
 import csv
+import os
 
 # Função para converter .tab para .csv
 def tab_to_csv(tab_file, csv_file):
@@ -83,8 +84,25 @@ def add_headers_to_csv(csv_file):
     except Exception as e:
         print(f"Ocorreu um erro ao adicionar os cabeçalhos: {e}")
 
-# Exemplo de uso
-tab_file = 'legus/tab_files/hlsp_legus_hst_wfc3_ngc3344_multiband_v1_padagb-mwext-avgapcor.tab'  # Caminho para o arquivo .tab
+def path_tab(galaxy='ngc3344'):
+    # Possíveis valores para filter_name e n
+    filter_names = ['wfc3', 'acs']
+    n_values = [1, 2]
+    
+    # Itera sobre todas as combinações de filter_name e n
+    for filter_name in filter_names:
+        for n in n_values:
+            tab_file = f'legus/tab_files/hlsp_legus_hst_{filter_name}_{galaxy}_multiband_v{n}_padagb-mwext-avgapcor.tab'
+            
+            # Verifica se o arquivo existe
+            if os.path.exists(tab_file):
+                return tab_file  # Retorna o caminho do arquivo encontrado
+    
+    # Caso não encontre nenhum arquivo correspondente, retorna uma mensagem ou None
+    return None
+
+
+tab_file = path_tab(galaxy)# Caminho para o arquivo .tab
 csv_file = 'output/original.csv'  # Caminho para salvar o arquivo .csv
 
 # Converter o arquivo .tab para .csv

@@ -57,28 +57,26 @@ def load_fits_image(galaxy, filter_name):
         print(f"Erro ao carregar {fits_filename}: {e}")
         return None
 
-# Loop pelas galáxias listadas em 'targets.txt'
-for galaxy_name in galaxies:  # Iterando sobre os nomes das galáxias
-    # Criar a pasta 'output/cropped/{galaxy_name}' se não existir
-    output_dir = os.path.join('output', 'cropped', galaxy_name)
-    os.makedirs(output_dir, exist_ok=True)
+# Criar a pasta 'output/cropped/{galaxy_name}' se não existir
+output_dir = os.path.join('output', 'cropped', galaxies)
+os.makedirs(output_dir, exist_ok=True)
 
-    # Loop pelas classes de objetos do DataFrame
-    for idx, row in df.iterrows():  # Iterando sobre as linhas do DataFrame
-        class_label = row['class(mode)']
-        
-        fig = plt.figure(figsize=(14, 4), dpi=80, facecolor='w', edgecolor='k')
-        
-        # Gerar a imagem RGB
-        img_rgb = legus2rgb(data_all[:][:][idx, :, :, :])
-        
-        # Plotar a imagem no gráfico
-        plt.imshow(img_rgb)
-        plt.axis('off')  # Desativar os eixos para uma imagem limpa
-        
-        # Salvar a imagem gerada com base na classe, ID da galáxia e filtro
-        output_filename = os.path.join(output_dir, f'class_{class_label}_galaxy_{galaxy_name}_obj_{idx + 1}.png')
-        plt.savefig(output_filename, bbox_inches='tight', pad_inches=0)
-        plt.close(fig)  # Fechar a figura após salvar para liberar memória
+# Loop pelas classes de objetos do DataFrame
+for idx, row in df.iterrows():  # Iterando sobre as linhas do DataFrame
+    class_label = row['class(mode)']
+    
+    fig = plt.figure(figsize=(14, 4), dpi=80, facecolor='w', edgecolor='k')
+    
+    # Gerar a imagem RGB
+    img_rgb = legus2rgb(data_all[:][:][idx, :, :, :])
+    
+    # Plotar a imagem no gráfico
+    plt.imshow(img_rgb)
+    plt.axis('off')  # Desativar os eixos para uma imagem limpa
+    
+    # Salvar a imagem gerada com base na classe, ID da galáxia e filtro
+    output_filename = os.path.join(output_dir, f'class_{class_label}_galaxy_{galaxy_name}_obj_{idx + 1}.png')
+    plt.savefig(output_filename, bbox_inches='tight', pad_inches=0)
+    plt.close(fig)  # Fechar a figura após salvar para liberar memória
 
 print(f'Imagens para as classes salvas em "output/cropped"!') 
