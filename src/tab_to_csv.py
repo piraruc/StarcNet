@@ -101,6 +101,8 @@ def path_tab(galaxy='ngc3344'):
     # Caso não encontre nenhum arquivo correspondente, retorna uma mensagem ou None
     return None
 
+with open('targets.txt', 'r') as f:
+    galaxy = f.read().splitlines()  # Lê todas as galáxias no arquivo e as coloca numa lista
 
 tab_file = path_tab(galaxy)# Caminho para o arquivo .tab
 csv_file = 'output/original.csv'  # Caminho para salvar o arquivo .csv
