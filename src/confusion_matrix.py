@@ -20,10 +20,12 @@ def generate_confusion_matrix(prediction_file, real_data_file):
         # Unir os dataframes com base na correspondência entre as coordenadas 'X', 'Y' e 'x', 'y'
         df_merged = pd.merge(df_predictions, df_real_data, left_on=['X', 'Y'], right_on=['x', 'y'], how='inner')
 
-        # Agora, temos as colunas 'Prediction' e 'class(mode)' para comparação
-        # As previsões estão na coluna 'Prediction' (em inteiro) e as classes reais em 'class(mode)' (em float)
-        
-        # Garantir que 'Prediction' seja inteiro e 'class(mode)' seja inteiro para comparação
+        # Se não houver dados após o merge, retornar None
+        if df_merged.empty:
+            print("Nenhuma correspondência encontrada entre as previsões e os dados reais.")
+            return None
+
+        # Garantir que 'Prediction' e 'class(mode)' sejam inteiros para comparação
         df_merged['Prediction'] = df_merged['Prediction'].astype(int)
         df_merged['class(mode)'] = df_merged['class(mode)'].astype(int)
 
@@ -46,6 +48,7 @@ def generate_confusion_matrix(prediction_file, real_data_file):
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
         return None
+
 
 def generate_percentage_cm(cm):
 # Criar uma matriz NumPy para armazenar as porcentagens
@@ -100,12 +103,13 @@ def save_confusion_and_percentage_to_csv(prediction_file, cm, output_file='outpu
     except Exception as e:
         print(f"Ocorreu um erro ao salvar os dados: {e}")
 
-# Exemplo de uso
-prediction_file = 'output/predictions.csv'  # Caminho para o arquivo com previsões do modelo
-real_data_file = 'output/original.csv'  # Caminho para o arquivo com dados reais
+if __name__ == "__main__":
+    # Exemplo de uso
+    prediction_file = 'output/predictions.csv'  # Caminho para o arquivo com previsões do modelo
+    real_data_file = 'output/original.csv'  # Caminho para o arquivo com dados reais
 
-cm = generate_confusion_matrix(prediction_file, real_data_file)
-cm_percentage = generate_percentage_cm(cm)
+    cm = generate_confusion_matrix(prediction_file, real_data_file)
+    cm_percentage = generate_percentage_cm(cm)
 
-# Salvar as informações no arquivo CSV
-save_confusion_and_percentage_to_csv(prediction_file, cm)
+    # Salvar as informações no arquivo CSV
+    save_confusion_and_percentage_to_csv(prediction_file, cm)
