@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def generate_confusion_matrix(prediction_file, real_data_file):
     try:
@@ -51,13 +53,19 @@ def generate_confusion_matrix(prediction_file, real_data_file):
 
 
 def generate_percentage_cm(cm):
-# Criar uma matriz NumPy para armazenar as porcentagens
+    # Criar uma matriz NumPy para armazenar as porcentagens
     cm_percentage = np.zeros_like(cm, dtype=float)
 
     for i in range(len(cm)):
         total_class_i = np.sum(cm[i])  # Total de instâncias da classe real i
-        for j in range(len(cm[i])):
-            cm_percentage[i, j] = (cm[i, j] / total_class_i) * 100  # Calcula a porcentagem por classe real
+        
+        # Verificando se o total da classe real i não é zero
+        if total_class_i == 0:
+            # Se o total for zero, não fazemos a divisão e atribuimos zero para a classe
+            cm_percentage[i, :] = 0
+        else:
+            for j in range(len(cm[i])):
+                cm_percentage[i, j] = (cm[i, j] / total_class_i) * 100  # Calcula a porcentagem por classe real
 
     print("\nMatriz de Confusão (Percentuais por Classe):")
     print(cm_percentage)
@@ -103,6 +111,26 @@ def save_confusion_and_percentage_to_csv(prediction_file, cm, output_file='outpu
     except Exception as e:
         print(f"Ocorreu um erro ao salvar os dados: {e}")
 
+def save_confusion_matrix_as_image(matrix, filename="confusion_matrix.png"):
+    # Garantindo que a matriz tenha valores numéricos
+    matrix = np.array(matrix, dtype=float)  # Convertendo a matriz para float
+    
+    # Criar a figura e o eixo
+    plt.figure(figsize=(8, 6))
+
+    # Plotando a matriz de confusão com seaborn
+    ax = sns.heatmap(matrix, annot=True, fmt=".2f", cmap="Blues", cbar=True, 
+                     xticklabels=np.arange(1, matrix.shape[1] + 1),  # Ajusta as colunas para começarem em 1
+                     yticklabels=np.arange(1, matrix.shape[0] + 1))  # Ajusta as linhas para começarem em 1
+
+    # Definindo título e labels
+    plt.title("Confusion Matrix")
+    plt.xlabel("Predicted Labels")
+    plt.ylabel("True Labels")
+
+    # Salvar a imagem
+    plt.savefig("output/" + filename, dpi=300, bbox_inches='tight')
+    plt.close()
 if __name__ == "__main__":
     # Exemplo de uso
     prediction_file = 'output/predictions.csv'  # Caminho para o arquivo com previsões do modelo
